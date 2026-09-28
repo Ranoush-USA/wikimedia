@@ -1,0 +1,31 @@
+resources:
+  jobs:
+    WIKIMEDIA:
+      name: WIKIMEDIA
+      email_notifications:
+        on_success:
+          - rana@ghazzi.com
+        on_failure:
+          - rana@ghazzi.com
+      tasks:
+        - task_key: WIKIMEDIA-API-Ingestion
+          notebook_task:
+            notebook_path: ../notebooks/Producer_streaming_engine.ipynb
+            source: WORKSPACE
+       
+        - task_key: wikimedia_bronze
+          depends_on:
+            - task_key: WIKIMEDIA-API-Ingestion
+          notebook_task: 
+            notebook_path: ../notebooks/wikimedia_bronze.ipynb
+            source: WORKSPACE
+       
+        - task_key: Silver_CDC_Merge
+          depends_on:
+            - task_key: wikimedia_bronze
+          notebook_task:
+            notebook_path: ../notebooks/wikimedia_silver.ipynb
+            source: WORKSPACE
+      queue:
+        enabled: true
+      performance_target: PERFORMANCE_OPTIMIZED
