@@ -1,0 +1,38 @@
+# Declarative Automation Bundle configuration, more info here: https://docs.databricks.com/en/dev-tools/bundles/settings.html
+bundle:
+  name: "WIKIMEDIA"
+
+include:
+       - resources/jobs/*.yml
+       - resources/pipelines/*.yml
+       - resources/notebooks/*.yml
+
+variables:
+  catalog:
+    default: workspace
+  bronze_schema:
+    default: bronze
+  silver_schema:
+    default: silver
+  gold_schema:
+    default: gold
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: https://dbc-c96a283d-ad26.cloud.databricks.com
+
+  prod:
+    mode: production
+    default: false
+    workspace:
+      host: https://dbc-c96a283d-ad26.cloud.databricks.com
+
+    
+    run_as:
+      user_name: rana@ghazzi.com
+    permissions:
+      - user_name: rana@ghazzi.com
+        level: CAN_MANAGE
